@@ -15,7 +15,7 @@ Renders a multi-part cloud-init config from source files.
 ```hcl
 # Render a part using a `template_file`
 data "template_file" "script" {
-  template = "${file("${path.module}/init.tpl")}"
+  template = "$${consul_address}:1234"
 
   vars {
     consul_address = "${aws_instance.consul.private_ip}"
