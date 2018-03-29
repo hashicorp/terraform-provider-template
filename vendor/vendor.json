@@ -376,12 +376,12 @@
 			"revisionTime": "2015-06-09T07:04:31Z"
 		},
 		{
-			"checksumSHA1": "KPrCMDPNcLmO7K6xPcJSl86LwPk=",
+			"checksumSHA1": "knu+KAcZkAVDfMw+sTimHiQYs8A=",
 			"path": "github.com/hashicorp/terraform/config",
-			"revision": "2041053ee9444fa8175a298093b55a89586a1823",
-			"revisionTime": "2017-08-02T18:39:14Z",
-			"version": "v0.10.0",
-			"versionExact": "v0.10.0"
+			"revision": "1f054df7525613cccbbc705d639024cb8ac2264a",
+			"revisionTime": "2017-09-14T18:15:35Z",
+			"version": "v0.10.5",
+			"versionExact": "v0.10.5"
 		},
 		{
 			"checksumSHA1": "uPCJ6seQo9kvoNSfwNWKX9KzVMk=",
