@@ -52,6 +52,15 @@ resource "aws_instance" "web" {
   instance_type = "t2.micro"
   user_data     = "${data.template_cloudinit_config.config.rendered}"
 }
+
+# Start a GCP instance with the cloudinit config as user data.
+resource "google_compute_instance" "web" {
+  name = "instance"
+  machine_type = "n1-standard-1"
+  metadata {
+    user-data = "${data.template_cloudinit_config.config.rendered}"      
+  }
+}
 ```
 
 ## Argument Reference
