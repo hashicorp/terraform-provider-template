@@ -341,10 +341,10 @@
 			"revision": "d30f09973e19c1dfcd120b2d9c4f168e68d6b5d5"
 		},
 		{
-			"checksumSHA1": "b0nQutPMJHeUmz4SjpreotAo6Yk=",
+			"checksumSHA1": "TM75ZrTZtNHIDvAMf18mItUc87U=",
 			"path": "github.com/hashicorp/go-plugin",
-			"revision": "f72692aebca2008343a9deb06ddb4b17f7051c15",
-			"revisionTime": "2017-02-17T16:27:05Z"
+			"revision": "1faddcf740b61468a23dacc67369c28ec96d7fc7",
+			"revisionTime": "2018-10-02T19:58:11Z"
 		},
 		{
 			"checksumSHA1": "0daDqRBckum49dBVYduwjaoObgU=",
@@ -896,6 +896,12 @@
 			"revisionTime": "2016-10-03T17:45:16Z"
 		},
 		{
+			"checksumSHA1": "nf3UoPNBIut7BL9nWE8Fw2X2j+Q=",
+			"path": "github.com/oklog/run",
+			"revision": "6934b124db28979da51d3470dadfa34d73d72652",
+			"revisionTime": "2018-03-08T00:51:04Z"
+		},
+		{
 			"checksumSHA1": "eU6C18oR9hAHGe/MBMYmMjBQ8r8=",
 			"path": "github.com/posener/complete",
 			"revision": "0d98d7ee195f007b3453c002780ed80c76e7c806",
@@ -1228,6 +1234,18 @@
 		{
 			"checksumSHA1": "ZPPSFisPDz2ANO4FBZIft+fRxyk=",
 			"path": "google.golang.org/grpc/grpclog",
+			"revision": "431e4028c50657d346e072d44889191b4a717d38",
+			"revisionTime": "2018-10-03T01:26:40Z"
+		},
+		{
+			"checksumSHA1": "5f4iDmBsp267R75UdXD6s01l+hk=",
+			"path": "google.golang.org/grpc/health",
+			"revision": "431e4028c50657d346e072d44889191b4a717d38",
+			"revisionTime": "2018-10-03T01:26:40Z"
+		},
+		{
+			"checksumSHA1": "KfgIKMqGJ8FdFbWlGDsnmrCY7eE=",
+			"path": "google.golang.org/grpc/health/grpc_health_v1",
 			"revision": "431e4028c50657d346e072d44889191b4a717d38",
 			"revisionTime": "2018-10-03T01:26:40Z"
 		},
