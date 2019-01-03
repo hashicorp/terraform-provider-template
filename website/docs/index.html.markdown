@@ -19,8 +19,7 @@ Use the navigation to the left to read about the available data sources.
 # Template for initial configuration bash script
 data "template_file" "init" {
   template = "${file("init.tpl")}"
-
-  vars {
+  vars = {
     consul_address = "${aws_instance.consul.private_ip}"
   }
 }
@@ -33,26 +32,7 @@ resource "aws_instance" "web" {
 }
 ```
 
-Or using an inline template:
-
-```hcl
-# Template for initial configuration bash script
-data "template_file" "init" {
-  template = "$${consul_address}:1234"
-
-  vars {
-    consul_address = "${aws_instance.consul.private_ip}"
-  }
-}
-
-# Create a web server
-resource "aws_instance" "web" {
-  # ...
-
-  user_data = "${data.template_file.init.rendered}"
-}
-```
-
--> **Note:** Inline templates must escape their interpolations (as seen
-by the double `$` above). Unescaped interpolations will be processed
-_before_ the template.
+For Terraform 0.12 and later, the `template_file` data source has been
+superseded by [the `templatefile` function](/docs/configuration/functions/templatefile.html),
+which can be used directly in expressions without creating a separate data
+resource.

@@ -32,7 +32,7 @@ resource "template_dir" "config" {
   source_dir      = "${path.module}/instance_config_templates"
   destination_dir = "${path.cwd}/instance_config"
   
-  vars {
+  vars = {
     consul_addr = "${var.consul_addr}"
   }
 }
@@ -74,12 +74,12 @@ Any required parent directories of `destination_dir` will be created
 automatically, and any pre-existing file or directory at that location will
 be deleted before template rendering begins.
 
-After rendering this resource remembers the content of both the source and
+After rendering, this resource remembers the content of both the source and
 destination directories in the Terraform state, and will plan to recreate the
 output directory if any changes are detected during the plan phase.
 
 Note that it is _not_ safe to use the `file` interpolation function to read
-files create by this resource, since that function can be evaluated before the
+files created by this resource, since that function can be evaluated before the
 destination directory has been created or updated. It *is* safe to use the
 generated files with resources that directly take filenames as arguments,
 as long as the path is constructed using the `destination_dir` attribute
@@ -87,19 +87,22 @@ to create a dependency relationship with the `template_dir` resource.
 
 ## Template Syntax
 
-The syntax of the template files is the same as
-[standard interpolation syntax](/docs/configuration/interpolation.html),
-but you only have access to the variables defined in the `vars` section.
+The `template` argument is processed as
+[Terraform template syntax](/docs/configuration/expressions.html#string-templates).
 
-To access interpolations that are normally available to Terraform
-configuration (such as other variables, resource attributes, module
-outputs, etc.) you can expose them via `vars` as shown below:
+However, this provider has its own copy of the template engine embedded in it,
+separate from Terraform itself, and so which features are available are decided
+based on what Terraform version the provider was compiled against, and not
+on which Terraform version you are running.
+
+To include values from your configuration in rendered templates, pass them
+via the `vars` argument as shown below:
 
 ```hcl
 resource "template_dir" "init" {
   # ...
 
-  vars {
+  vars = {
     foo  = "${var.foo}"
     attr = "${aws_instance.foo.private_ip}"
   }
