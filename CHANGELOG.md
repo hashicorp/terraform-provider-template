@@ -1,4 +1,7 @@
-## 1.0.1 (Unreleased)
+## 2.0.0 (Unreleased)
+
+* The provider is now compatible with Terraform v0.12, while retaining compatibility with prior versions.
+
 ## 1.0.0 (September 26, 2017)
 
 * No changes from 0.1.1; just adjusting to [the new version numbering scheme](https://www.hashicorp.com/blog/hashicorp-terraform-provider-versioning/).
