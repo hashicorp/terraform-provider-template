@@ -59,12 +59,9 @@ The following arguments are supported:
   that variables must all be primitives. Direct references to lists or maps
   will cause a validation error.
 
-The following arguments are maintained for backwards compatibility and may be
-removed in a future version:
-
-* `filename` - _Deprecated, please use `template` instead_. The filename for
-  the template. Use [path variables](/docs/configuration/interpolation.html#path-variables) to make
-  this path relative to different path roots.
+Earlier versions of `template_file` accepted another argument `filename` as
+an alternative to `template`. This has now been removed. Use the `template`
+argument with the `file` function to get the same effect.
 
 ## Template Syntax
 
