@@ -22,26 +22,30 @@ func TestTemplateRendering(t *testing.T) {
 	}{
 		{`{}`, `ABC`, `ABC`},
 		{`{a="foo"}`, `$${a}`, `foo`},
-		{`{a="hello"}`, `$${replace(a, "ello", "i")}`, `hi`},
+		{`{a="hello"}`, `$${replace(a, \"ello\", \"i\")}`, `hi`},
 		{`{}`, `${1+2+3}`, `6`},
 		{`{}`, `/`, `/`},
 	}
 
 	for _, tt := range cases {
-		r.UnitTest(t, r.TestCase{
-			Providers: testProviders,
-			Steps: []r.TestStep{
-				{
-					Config: testTemplateConfig(tt.template, tt.vars),
-					Check: func(s *terraform.State) error {
-						got := s.RootModule().Outputs["rendered"]
-						if tt.want != got.Value {
-							return fmt.Errorf("template:\n%s\nvars:\n%s\ngot:\n%s\nwant:\n%s\n", tt.template, tt.vars, got, tt.want)
-						}
-						return nil
+		t.Run(fmt.Sprintf("%s with %s", tt.template, tt.vars), func(t *testing.T) {
+			configSrc := testTemplateConfig(tt.template, tt.vars)
+			t.Logf("testing with this generated config:\n%s", configSrc)
+			r.UnitTest(t, r.TestCase{
+				Providers: testProviders,
+				Steps: []r.TestStep{
+					{
+						Config: configSrc,
+						Check: func(s *terraform.State) error {
+							got := s.RootModule().Outputs["rendered"]
+							if tt.want != got.Value {
+								return fmt.Errorf("template:\n%s\nvars:\n%s\ngot:\n%s\nwant:\n%s\n", tt.template, tt.vars, got, tt.want)
+							}
+							return nil
+						},
 					},
 				},
-			},
+			})
 		})
 	}
 }
@@ -119,6 +123,6 @@ func testTemplateConfig(template, vars string) string {
 			vars = %s
 		}
 		output "rendered" {
-				value = "${data.template_file.t0.rendered}"
+			value = "${data.template_file.t0.rendered}"
 		}`, template, vars)
 }
