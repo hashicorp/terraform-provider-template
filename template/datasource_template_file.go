@@ -29,9 +29,8 @@ func dataSourceFile() *schema.Resource {
 				ConflictsWith: []string{"filename"},
 			},
 			"filename": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "file to read template from",
+				Type:     schema.TypeString,
+				Optional: true,
 				// Make a "best effort" attempt to relativize the file path.
 				StateFunc: func(v interface{}) string {
 					if v == nil || v.(string) == "" {
@@ -47,7 +46,7 @@ func dataSourceFile() *schema.Resource {
 					}
 					return rel
 				},
-				Deprecated:    "Use the 'template' attribute instead.",
+				Removed:       "Use the 'template' attribute instead.",
 				ConflictsWith: []string{"template"},
 			},
 			"vars": {
