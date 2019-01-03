@@ -91,15 +91,15 @@ github.com/hashicorp/hcl/hcl/strconv
 github.com/hashicorp/hcl/json/scanner
 github.com/hashicorp/hcl/json/token
 # github.com/hashicorp/hcl2 v0.0.0-20181220012050-6631d7cd0a68
-github.com/hashicorp/hcl2/gohcl
 github.com/hashicorp/hcl2/hcl
-github.com/hashicorp/hcl2/hclparse
 github.com/hashicorp/hcl2/hcl/hclsyntax
+github.com/hashicorp/hcl2/ext/dynblock
 github.com/hashicorp/hcl2/hcldec
+github.com/hashicorp/hcl2/gohcl
+github.com/hashicorp/hcl2/hclparse
+github.com/hashicorp/hcl2/ext/typeexpr
 github.com/hashicorp/hcl2/hclwrite
 github.com/hashicorp/hcl2/hcl/json
-github.com/hashicorp/hcl2/ext/typeexpr
-github.com/hashicorp/hcl2/ext/dynblock
 github.com/hashicorp/hcl2/hcled
 # github.com/hashicorp/hil v0.0.0-20170627220502-fa9f258a9250
 github.com/hashicorp/hil
@@ -108,12 +108,12 @@ github.com/hashicorp/hil/parser
 github.com/hashicorp/hil/scanner
 # github.com/hashicorp/logutils v0.0.0-20150609070431-0dc08b1671f3
 github.com/hashicorp/logutils
-# github.com/hashicorp/terraform v0.12.0-alpha4.0.20190105003045-34e792db2cb5
+# github.com/hashicorp/terraform v0.12.0-alpha4.0.20181220225118-faf4889c81af
 github.com/hashicorp/terraform/plugin
-github.com/hashicorp/terraform/config
 github.com/hashicorp/terraform/helper/hashcode
 github.com/hashicorp/terraform/helper/pathorcontents
 github.com/hashicorp/terraform/helper/schema
+github.com/hashicorp/terraform/lang
 github.com/hashicorp/terraform/terraform
 github.com/hashicorp/terraform/configs/configschema
 github.com/hashicorp/terraform/helper/plugin
@@ -123,17 +123,17 @@ github.com/hashicorp/terraform/plugin/discovery
 github.com/hashicorp/terraform/providers
 github.com/hashicorp/terraform/provisioners
 github.com/hashicorp/terraform/version
+github.com/hashicorp/terraform/config
 github.com/hashicorp/terraform/config/hcl2shim
-github.com/hashicorp/terraform/helper/hilmapstructure
 github.com/hashicorp/terraform/tfdiags
 github.com/hashicorp/terraform/addrs
+github.com/hashicorp/terraform/lang/funcs
 github.com/hashicorp/terraform/config/module
 github.com/hashicorp/terraform/configs
 github.com/hashicorp/terraform/dag
 github.com/hashicorp/terraform/flatmap
 github.com/hashicorp/terraform/helper/didyoumean
 github.com/hashicorp/terraform/httpclient
-github.com/hashicorp/terraform/lang
 github.com/hashicorp/terraform/moduledeps
 github.com/hashicorp/terraform/plans
 github.com/hashicorp/terraform/plans/objchange
@@ -144,7 +144,7 @@ github.com/hashicorp/terraform/registry
 github.com/hashicorp/terraform/registry/regsrc
 github.com/hashicorp/terraform/registry/response
 github.com/hashicorp/terraform/svchost/disco
-github.com/hashicorp/terraform/lang/funcs
+github.com/hashicorp/terraform/helper/hilmapstructure
 github.com/hashicorp/terraform/command/format
 github.com/hashicorp/terraform/configs/configload
 github.com/hashicorp/terraform/helper/config
@@ -195,21 +195,21 @@ github.com/vmihailenco/msgpack
 github.com/vmihailenco/msgpack/codes
 # github.com/zclconf/go-cty v0.0.0-20181218225846-4fe1e489ee06
 github.com/zclconf/go-cty/cty
-github.com/zclconf/go-cty/cty/msgpack
 github.com/zclconf/go-cty/cty/convert
+github.com/zclconf/go-cty/cty/msgpack
 github.com/zclconf/go-cty/cty/function
 github.com/zclconf/go-cty/cty/function/stdlib
 github.com/zclconf/go-cty/cty/json
 github.com/zclconf/go-cty/cty/gocty
 github.com/zclconf/go-cty/cty/set
 # golang.org/x/crypto v0.0.0-20181127143415-eb0de9b17e85
-golang.org/x/crypto/bcrypt
 golang.org/x/crypto/openpgp
-golang.org/x/crypto/blowfish
+golang.org/x/crypto/bcrypt
 golang.org/x/crypto/openpgp/armor
 golang.org/x/crypto/openpgp/errors
 golang.org/x/crypto/openpgp/packet
 golang.org/x/crypto/openpgp/s2k
+golang.org/x/crypto/blowfish
 golang.org/x/crypto/cast5
 golang.org/x/crypto/openpgp/elgamal
 # golang.org/x/net v0.0.0-20181129055619-fae4c4e3ad76

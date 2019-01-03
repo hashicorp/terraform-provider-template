@@ -8,25 +8,26 @@ description: |-
 
 # template_file
 
-Renders a template from a file.
+The `template_file` data source renders a template from a template string,
+which is usually loaded from an external file.
+
+~> **Note** In Terraform 0.12 and later,
+[the `templatefile` function](/docs/configuration/functions/templatefile.html)
+offers a built-in mechanism for rendering a template from a file. Use that
+function instead, unless you are using Terraform 0.11 or earlier.
 
 ## Example Usage
-
-Option 1: From a file:
-
-Reference the template path:
 
 ```hcl
 data "template_file" "init" {
   template = "${file("${path.module}/init.tpl")}"
-
-  vars {
+  vars = {
     consul_address = "${aws_instance.consul.private_ip}"
   }
 }
 ```
 
-Inside the file, reference the variable as such:
+Inside `init.tpl` you can include the value of `consul_address`. For example:
 
 ```bash
 #!/bin/bash
@@ -34,25 +35,25 @@ Inside the file, reference the variable as such:
 echo "CONSUL_ADDRESS = ${consul_address}" > /tmp/iplist
 ```
 
-Option 2: Inline:
+Although in principle `template_file` can be used with an inline template
+string, we don't recommend this approach because it requires awkward escaping.
+Instead, just use [template syntax](/docs/configuration/expressions.html#string-templates)
+directly in the configuration. For example:
 
 ```hcl
-data "template_file" "init" {
-  template = "$${consul_address}:1234"
-
-  vars {
-    consul_address = "${aws_instance.consul.private_ip}"
-  }
-}
+  user_data = <<-EOT
+    echo "CONSUL_ADDRESS = ${aws_instance.consul.private_ip}" > /tmp/iplist
+  EOT
 ```
 
 ## Argument Reference
 
 The following arguments are supported:
 
-* `template` - (Required) The contents of the template. These can be loaded
-  from a file on disk using the [`file()` interpolation
-  function](/docs/configuration/interpolation.html#file_path_).
+* `template` - (Required) The contents of the template, as a string using
+  [Terraform template syntax](/docs/configuration/expressions.html#string-templates).
+  Use [the `file` function](/docs/configuration/functions/file.html) to load
+  the template source from a separate file on disk.
 
 * `vars` - (Optional) Variables for interpolation within the template. Note
   that variables must all be primitives. Direct references to lists or maps
@@ -65,6 +66,22 @@ removed in a future version:
   the template. Use [path variables](/docs/configuration/interpolation.html#path-variables) to make
   this path relative to different path roots.
 
+## Template Syntax
+
+The `template` argument is processed as
+[Terraform template syntax](/docs/configuration/expressions.html#string-templates).
+
+However, this provider has its own copy of the template engine embedded in it,
+separate from Terraform itself, and so which features are available are decided
+based on what Terraform version the provider was compiled against, and not
+on which Terraform version you are running.
+
+For more consistent results, Terraform 0.12 has a built in function
+[`templatefile`](/docs/configuration/functions/templatefile.html) which serves
+the same purpose as this data source. Use that function instead if you are
+using Terraform 0.12 or later. Its template and expression capabilities will
+always match the version of Terraform you are using.
+
 ## Attributes Reference
 
 The following attributes are exported:
@@ -72,66 +89,3 @@ The following attributes are exported:
 * `template` - See Argument Reference above.
 * `vars` - See Argument Reference above.
 * `rendered` - The final rendered template.
-
-## Template Syntax
-
-The syntax of the template files is the same as
-[standard interpolation syntax](/docs/configuration/interpolation.html),
-but you only have access to the variables defined in the `vars` section.
-
-To access interpolations that are normally available to Terraform
-configuration (such as other variables, resource attributes, module
-outputs, etc.) you'll have to expose them via `vars` as shown below:
-
-```hcl
-data "template_file" "init" {
-  # ...
-
-  vars {
-    foo  = "${var.foo}"
-    attr = "${aws_instance.foo.private_ip}"
-  }
-}
-```
-
-## Inline Templates
-
-Inline templates allow you to specify the template string inline without
-loading a file. An example is shown below:
-
-```hcl
-data "template_file" "init" {
-  template = "$${consul_address}:1234"
-
-  vars {
-    consul_address = "${aws_instance.consul.private_ip}"
-  }
-}
-```
-
--> **Important:** Template variables in an inline template (such as
-`consul_address` above) must be escaped with a double-`$`. Unescaped
-interpolations will be processed by Terraform normally prior to executing
-the template.
-
-An example of mixing escaped and non-escaped interpolations in a template:
-
-```hcl
-variable "port" { default = 80 }
-
-data "template_file" "init" {
-  template = "$${foo}:${var.port}"
-
-  vars {
-    foo = "${count.index}"
-  }
-}
-```
-
-In the above example, the template is processed by Terraform first to
-turn it into: `${foo}:80`. After that, the template is processed as a
-template to interpolate `foo`.
-
-In general, you should use template variables in the `vars` block and try
-not to mix interpolations. This keeps it understandable and has the benefit
-that you don't have to change anything to switch your template to a file.
