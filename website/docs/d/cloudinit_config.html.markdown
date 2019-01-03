@@ -8,7 +8,18 @@ description: |-
 
 # template_cloudinit_config
 
-Renders a multi-part cloud-init config from source files.
+Renders a [multipart MIME configuration](https://cloudinit.readthedocs.io/en/latest/topics/format.html#mime-multi-part-archive)
+for use with [Cloud-init](https://cloudinit.readthedocs.io/).
+
+Cloud-init is a commonly-used startup configuration utility for cloud compute
+instances. It accepts configuration via provider-specific user data mechanisms,
+such as `user_data` for Amazon EC2 instances. Multipart MIME is one of the
+data formats it accepts. For more information, see
+[User-Data Formats](https://cloudinit.readthedocs.io/en/latest/topics/format.html)
+in the Cloud-init manual.
+
+This is not a generalized utility for producing multipart MIME messages. Its
+featureset is specialized for the features of cloud-init.
 
 ## Example Usage
 
@@ -22,13 +33,13 @@ data "template_file" "script" {
   }
 }
 
-# Render a multi-part cloudinit config making use of the part
+# Render a multi-part cloud-init config making use of the part
 # above, and other source files
 data "template_cloudinit_config" "config" {
   gzip          = true
   base64_encode = true
 
-  # Setup hello world script to be called by the cloud-config
+  # Main cloud-config configuration file.
   part {
     filename     = "init.cfg"
     content_type = "text/cloud-config"
@@ -46,11 +57,11 @@ data "template_cloudinit_config" "config" {
   }
 }
 
-# Start an AWS instance with the cloudinit config as user data
+# Start an AWS instance with the cloud-init config as user data
 resource "aws_instance" "web" {
-  ami           = "ami-d05e75b8"
-  instance_type = "t2.micro"
-  user_data     = "${data.template_cloudinit_config.config.rendered}"
+  ami              = "ami-d05e75b8"
+  instance_type    = "t2.micro"
+  user_data_base64 = "${data.template_cloudinit_config.config.rendered}"
 }
 ```
 
@@ -58,24 +69,29 @@ resource "aws_instance" "web" {
 
 The following arguments are supported:
 
-* `gzip` - (Optional) Specify whether or not to gzip the rendered output. Default to `true`
+* `gzip` - (Optional) Specify whether or not to gzip the rendered output. Defaults to `true`.
 
-* `base64_encode` - (Optional) Base64 encoding of the rendered output. Default to `true`
+* `base64_encode` - (Optional) Base64 encoding of the rendered output. Defaults to `true`,
+  and cannot be disabled if `gzip` is `true`.
 
-* `part` - (Required) One may specify this many times, this creates a fragment of the rendered cloud-init config file. The order of the parts is maintained in the configuration is maintained in the rendered template.
+* `part` - (Required) A nested block type which adds a file to the generated
+  cloud-init configuration. Use multiple `part` blocks to specify multiple
+  files, which will be included in order of declaration in the final MIME
+  document.
 
-The `part` block supports:
+Each `part` block expects the following arguments:
 
-* `filename` - (Optional) Filename to save part as.
+* `content` - (Required) Body content for the part.
 
-* `content_type` - (Optional) Content type to send file as.
+* `filename` - (Optional) A filename to report in the header for the part.
 
-* `content` - (Required) Body for the part.
+* `content_type` - (Optional) A MIME-style content type to report in the header for the part.
 
-* `merge_type` - (Optional) Gives the ability to merge multiple blocks of cloud-config together.
+* `merge_type` - (Optional) A value for the `X-Merge-Type` header of the part,
+  to control [cloud-init merging behavior](https://cloudinit.readthedocs.io/en/latest/topics/merging.html).
 
 ## Attributes Reference
 
 The following attributes are exported:
 
-* `rendered` - The final rendered multi-part cloudinit config.
+* `rendered` - The final rendered multi-part cloud-init config.
