@@ -6,7 +6,7 @@ github.com/apparentlymart/go-cidr/cidr
 github.com/apparentlymart/go-textseg/textseg
 # github.com/armon/go-radix v0.0.0-20160115234725-4239b77079c7
 github.com/armon/go-radix
-# github.com/aws/aws-sdk-go v1.16.4
+# github.com/aws/aws-sdk-go v1.16.12
 github.com/aws/aws-sdk-go/aws
 github.com/aws/aws-sdk-go/aws/credentials
 github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds
@@ -108,7 +108,7 @@ github.com/hashicorp/hil/parser
 github.com/hashicorp/hil/scanner
 # github.com/hashicorp/logutils v0.0.0-20150609070431-0dc08b1671f3
 github.com/hashicorp/logutils
-# github.com/hashicorp/terraform v0.12.0-alpha4.0.20181221160614-c753df6a933e
+# github.com/hashicorp/terraform v0.12.0-alpha4.0.20190105003045-34e792db2cb5
 github.com/hashicorp/terraform/plugin
 github.com/hashicorp/terraform/config
 github.com/hashicorp/terraform/helper/hashcode
