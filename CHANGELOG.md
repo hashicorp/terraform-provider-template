@@ -1,4 +1,7 @@
-## 2.2.0 (Unreleased)
+## 2.1.2 (Unreleased)
+
+* This release includes another upgrade of the Terraform SDK, primarily for the purposes of aligning versions with other providers prior to the v0.12.0 release. The changes in the SDK should not affect the behavior of this particular provider.
+
 ## 2.1.1 (April 11, 2019)
 
 OTHER:
