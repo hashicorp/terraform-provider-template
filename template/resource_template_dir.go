@@ -105,7 +105,13 @@ func resourceTemplateDirCreate(d *schema.ResourceData, meta interface{}) error {
 			return nil
 		}
 
-		relPath, _ := filepath.Rel(sourceDir, p)
+		// Render destination filename
+		pRendered, err := execute(p, vars)
+		if err != nil {
+			return templateRenderError(fmt.Errorf("failed to render filename %v: %v", p, err))
+		}
+
+		relPath, _ := filepath.Rel(sourceDir, pRendered)
 		return generateDirFile(p, path.Join(destinationDir, relPath), f, vars)
 	})
 	if err != nil {
