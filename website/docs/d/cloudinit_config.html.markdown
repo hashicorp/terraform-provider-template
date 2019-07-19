@@ -28,7 +28,7 @@ featureset is specialized for the features of cloud-init.
 data "template_file" "script" {
   template = "${file("${path.module}/init.tpl")}"
 
-  vars {
+  vars = {
     consul_address = "${aws_instance.consul.private_ip}"
   }
 }
