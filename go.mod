@@ -1,5 +1,7 @@
 module github.com/terraform-providers/terraform-provider-template
 
+go 1.13
+
 require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/hashicorp/hcl2 v0.0.0-20190416162332-2c5a4b7d729a
