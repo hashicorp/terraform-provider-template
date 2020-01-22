@@ -5,18 +5,20 @@ import (
 	"testing"
 
 	"errors"
-	r "github.com/hashicorp/terraform/helper/resource"
-	"github.com/hashicorp/terraform/terraform"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	r "github.com/hashicorp/terraform/helper/resource"
+	"github.com/hashicorp/terraform/terraform"
 )
 
 const templateDirRenderingConfig = `
 resource "template_dir" "dir" {
 	source_dir = "%s"
   destination_dir = "%s"
-  vars = %s
+	vars = %s
+  sensitive_vars = %s
 }`
 
 type testTemplate struct {
@@ -50,8 +52,9 @@ func testTemplateDirWriteFiles(files map[string]testTemplate) (in, out string, e
 
 func TestTemplateDirRendering(t *testing.T) {
 	var cases = []struct {
-		vars  string
-		files map[string]testTemplate
+		vars           string
+		sensitive_vars string
+		files          map[string]testTemplate
 	}{
 		{
 			files: map[string]testTemplate{
@@ -59,7 +62,17 @@ func TestTemplateDirRendering(t *testing.T) {
 				"nested/monkey.txt": {"ooh-ooh-ooh-eee-eee", "ooh-ooh-ooh-eee-eee"},
 				"maths.txt":         {"${1+2+3}", "6"},
 			},
-			vars: `{bar = "bar"}`,
+			vars:           `{bar = "bar"}`,
+			sensitive_vars: `{}`,
+		},
+		{
+			files: map[string]testTemplate{
+				"foo.txt":           {"${bar}-${speakeasy}", "bar-speakeasy"},
+				"nested/monkey.txt": {"ooh-ooh-ooh-eee-eee", "ooh-ooh-ooh-eee-eee"},
+				"maths.txt":         {"${1+2+3}", "6"},
+			},
+			vars:           `{bar = "bar"}`,
+			sensitive_vars: `{speakeasy = "speakeasy"}`,
 		},
 	}
 
@@ -78,7 +91,7 @@ func TestTemplateDirRendering(t *testing.T) {
 			Providers: testProviders,
 			Steps: []r.TestStep{
 				{
-					Config: fmt.Sprintf(templateDirRenderingConfig, in, out, tt.vars),
+					Config: fmt.Sprintf(templateDirRenderingConfig, in, out, tt.vars, tt.sensitive_vars),
 					Check: func(s *terraform.State) error {
 						for name, file := range tt.files {
 							content, err := ioutil.ReadFile(filepath.Join(out, name))
