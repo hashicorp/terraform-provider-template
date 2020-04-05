@@ -9,7 +9,6 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"path"
 	"path/filepath"
 
 	"github.com/hashicorp/terraform/helper/pathorcontents"
@@ -106,7 +105,7 @@ func resourceTemplateDirCreate(d *schema.ResourceData, meta interface{}) error {
 		}
 
 		relPath, _ := filepath.Rel(sourceDir, p)
-		return generateDirFile(p, path.Join(destinationDir, relPath), f, vars)
+		return generateDirFile(p, filepath.Join(destinationDir, relPath), f, vars)
 	})
 	if err != nil {
 		return err
@@ -148,7 +147,7 @@ func generateDirFile(sourceDir, destinationDir string, f os.FileInfo, vars map[s
 		return templateRenderError(fmt.Errorf("failed to render %v: %v", sourceDir, err))
 	}
 
-	outputDir := path.Dir(destinationDir)
+	outputDir := filepath.Dir(destinationDir)
 	if _, err := os.Stat(outputDir); err != nil {
 		if err := os.MkdirAll(outputDir, 0777); err != nil {
 			return err
