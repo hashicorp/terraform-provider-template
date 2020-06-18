@@ -7,6 +7,9 @@ This Terraform provider is archived, per our [provider archiving process](https:
 1. Issues and pull requests are not being monitored.
 1. New releases will not be published.
 
+
+Please see https://github.com/hashicorp/terraform-provider-template/issues/85 and the documentation for recommended replacements.
+
 ---
 
 <!-- /archived-provider -->
