@@ -1,4 +1,7 @@
 ## 2.2.0 (Unreleased)
+
+* Ship arm64 binary
+
 ## 2.1.2 (May 01, 2019)
 
 * This release includes another upgrade of the Terraform SDK, primarily for the purposes of aligning versions with other providers prior to the v0.12.0 release. The changes in the SDK should not affect the behavior of this particular provider.
