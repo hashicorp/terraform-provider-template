@@ -1,4 +1,4 @@
-## 2.2.0 (Unreleased)
+## 2.2.0 (October 08, 2020)
 
 * Ship arm64 binary
 
