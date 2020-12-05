@@ -37,6 +37,15 @@ func resourceDir() *schema.Resource {
 				ValidateFunc: validateVarsAttribute,
 				ForceNew:     true,
 			},
+			"sensitive_vars": {
+				Type:         schema.TypeMap,
+				Optional:     true,
+				Default:      make(map[string]interface{}),
+				Description:  "Variables to substitute",
+				ValidateFunc: validateVarsAttribute,
+				Sensitive:    true,
+				ForceNew:     true,
+			},
 			"destination_dir": {
 				Type:        schema.TypeString,
 				Description: "Path to the directory where the templated files will be written",
@@ -79,8 +88,20 @@ func resourceTemplateDirRead(d *schema.ResourceData, meta interface{}) error {
 func resourceTemplateDirCreate(d *schema.ResourceData, meta interface{}) error {
 	sourceDir := d.Get("source_dir").(string)
 	destinationDir := d.Get("destination_dir").(string)
-	vars := d.Get("vars").(map[string]interface{})
+	vars, varOk := d.GetOk("vars")
+	sensitiveVars, sensitiveVarOk := d.GetOk("sensitive_vars")
 
+	allVars := make(map[string]interface{})
+	if varOk {
+		for k, v := range vars.(map[string]interface{}) {
+			allVars[k] = v
+		}
+	}
+	if sensitiveVarOk {
+		for k, v := range sensitiveVars.(map[string]interface{}) {
+			allVars[k] = v
+		}
+	}
 	// Always delete the output first, otherwise files that got deleted from the
 	// input directory might still be present in the output afterwards.
 	if err := resourceTemplateDirDelete(d, meta); err != nil {
@@ -106,7 +127,7 @@ func resourceTemplateDirCreate(d *schema.ResourceData, meta interface{}) error {
 		}
 
 		relPath, _ := filepath.Rel(sourceDir, p)
-		return generateDirFile(p, path.Join(destinationDir, relPath), f, vars)
+		return generateDirFile(p, path.Join(destinationDir, relPath), f, allVars)
 	})
 	if err != nil {
 		return err
