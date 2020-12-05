@@ -57,6 +57,17 @@ func resourceTemplateDirRead(d *schema.ResourceData, meta interface{}) error {
 		return nil
 	}
 
+	// https://github.com/terraform-providers/terraform-provider-template/issues/19
+	// If we think we can't find the input, then either:
+	// a) it really isn't there
+	// b) the state contains a stale absolute path
+	// If the input really doesn't exist, we will still fail during the create.
+	// Mark the resource for creation without trying to checksum it.
+	if _, err := os.Stat(sourceDir); os.IsNotExist(err) {
+		d.SetId("")
+		return nil
+	}
+
 	// If the combined hash of the input and output directories is different from
 	// the stored one, mark the resource for re-creation.
 	//
