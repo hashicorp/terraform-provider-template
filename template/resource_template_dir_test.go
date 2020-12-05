@@ -20,6 +20,7 @@ resource "template_dir" "dir" {
 }`
 
 type testTemplate struct {
+	filename string
 	template string
 	want     string
 }
@@ -55,9 +56,10 @@ func TestTemplateDirRendering(t *testing.T) {
 	}{
 		{
 			files: map[string]testTemplate{
-				"foo.txt":           {"${bar}", "bar"},
-				"nested/monkey.txt": {"ooh-ooh-ooh-eee-eee", "ooh-ooh-ooh-eee-eee"},
-				"maths.txt":         {"${1+2+3}", "6"},
+				"${bar}.txt":        {"bar.txt", "foo ${bar}", "foo bar"},
+				"foo.txt":           {"foo.txt", "${bar}", "bar"},
+				"nested/monkey.txt": {"nested/monkey.txt", "ooh-ooh-ooh-eee-eee", "ooh-ooh-ooh-eee-eee"},
+				"maths.txt":         {"maths.txt", "${1+2+3}", "6"},
 			},
 			vars: `{bar = "bar"}`,
 		},
@@ -80,8 +82,8 @@ func TestTemplateDirRendering(t *testing.T) {
 				{
 					Config: fmt.Sprintf(templateDirRenderingConfig, in, out, tt.vars),
 					Check: func(s *terraform.State) error {
-						for name, file := range tt.files {
-							content, err := ioutil.ReadFile(filepath.Join(out, name))
+						for _, file := range tt.files {
+							content, err := ioutil.ReadFile(filepath.Join(out, file.filename))
 							if err != nil {
 								return fmt.Errorf("template:\n%s\nvars:\n%s\ngot:\n%s\nwant:\n%s\n", file.template, tt.vars, err, file.want)
 							}
